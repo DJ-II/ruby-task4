@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f7fa">
+    <title><%= content_for(:title) || "User Management" %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "user_selection", defer: true %>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <header class="border-bottom bg-white">
+      <div class="container-xxl d-flex align-items-center justify-content-between py-3">
+        <a href="<%= current_user ? users_path : login_path %>" class="text-decoration-none fw-semibold text-dark fs-5" data-turbo="false">User Management</a>
+        <% if current_user %>
+          <div class="d-flex align-items-center gap-3">
+            <span class="d-none d-sm-inline small text-secondary"><%= current_user.email %></span>
+            <%= button_to "Sign out", logout_path, method: :delete, class: "btn btn-outline-secondary btn-sm", form: { data: { turbo: false } } %>
+          </div>
+        <% end %>
+      </div>
+    </header>
+
+    <main class="container-xxl py-4 py-md-5">
+      <% flash.each do |type, message| %>
+        <div class="alert <%= type.to_s == 'notice' ? 'alert-success' : 'alert-danger' %>" role="status"><%= message %></div>
+      <% end %>
+      <%= yield %>
+    </main>
+  </body>
+</html>

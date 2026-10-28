@@ -1,0 +1,63 @@
+<% content_for :title, "Users | User Management" %>
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end gap-2 mb-4">
+  <div>
+    <h1 class="h3 fw-semibold mb-1">Users</h1>
+    <p class="text-secondary mb-0">Manage account access and status.</p>
+  </div>
+  <span class="text-secondary small"><%= @users.size %> total users</span>
+</div>
+
+<div class="card user-card shadow-sm border-0">
+  <%= form_with url: bulk_users_path, method: :post, id: "bulk-users-form", data: { turbo: false } do %>
+    <div class="toolbar d-flex align-items-center flex-wrap gap-2 px-3 px-md-4 py-3 border-bottom">
+      <button class="btn btn-danger btn-sm bulk-action" type="submit" name="operation" value="block" disabled data-bs-toggle="tooltip" title="Block selected users">
+        <i class="bi bi-lock-fill me-1" aria-hidden="true"></i> Block
+      </button>
+      <button class="btn btn-outline-secondary btn-sm bulk-action icon-button" type="submit" name="operation" value="unblock" disabled data-bs-toggle="tooltip" title="Unblock selected users" aria-label="Unblock selected users">
+        <i class="bi bi-unlock" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-outline-danger btn-sm bulk-action icon-button" type="submit" name="operation" value="delete" disabled data-bs-toggle="tooltip" title="Delete selected users" aria-label="Delete selected users">
+        <i class="bi bi-trash" aria-hidden="true"></i>
+      </button>
+      <span class="ms-auto text-secondary small" id="selection-count" aria-live="polite">0 selected</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0 user-table">
+        <thead>
+          <tr>
+            <th scope="col" class="check-column">
+              <input id="select-all" type="checkbox" class="form-check-input" aria-label="Select all users">
+            </th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Last login</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td class="check-column">
+                <input class="form-check-input user-checkbox" type="checkbox" name="user_ids[]" value="<%= user.id %>" aria-label="Select <%= user.name %>">
+              </td>
+              <td class="fw-medium"><%= user.name %><% if user.id == current_user.id %><span class="text-secondary fw-normal small ms-2">(you)</span><% end %></td>
+              <td class="text-secondary"><%= user.email %></td>
+              <td class="text-secondary text-nowrap"><%= user.last_login_at ? user.last_login_at.utc.strftime("%Y-%m-%d %H:%M UTC") : "Never" %></td>
+              <td>
+                <% if user.blocked? %>
+                  <span class="badge status-blocked"><span class="status-dot"></span>Blocked</span>
+                <% else %>
+                  <span class="badge status-active"><span class="status-dot"></span>Active</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @users.empty? %>
+            <tr><td colspan="5" class="text-center py-5 text-secondary">No users found.</td></tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

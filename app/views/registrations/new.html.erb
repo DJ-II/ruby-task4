@@ -1,0 +1,29 @@
+<% content_for :title, "Register | User Management" %>
+<div class="auth-wrap">
+  <div class="card border-0 shadow-sm auth-card">
+    <div class="card-body p-4 p-md-5">
+      <h1 class="h3 fw-semibold mb-2">Create account</h1>
+      <p class="text-secondary mb-4">Register to access the user management table.</p>
+      <% if @user.errors.any? %>
+        <div class="alert alert-danger" role="alert"><%= @user.errors.full_messages.to_sentence %></div>
+      <% end %>
+      <%= form_with model: @user, url: register_path, method: :post, data: { turbo: false } do |form| %>
+        <div class="mb-3">
+          <%= form.label :name, "Full name", class: "form-label" %>
+          <%= form.text_field :name, class: "form-control", required: true, autocomplete: "name" %>
+        </div>
+        <div class="mb-3">
+          <%= form.label :email, "Email address", class: "form-label" %>
+          <%= form.email_field :email, class: "form-control", required: true, autocomplete: "email" %>
+        </div>
+        <div class="mb-4">
+          <%= form.label :password, "Password", class: "form-label" %>
+          <%= form.password_field :password, class: "form-control", required: true, autocomplete: "new-password" %>
+          <div class="form-text">Any non-empty password is accepted.</div>
+        </div>
+        <%= form.submit "Create account", class: "btn btn-primary w-100" %>
+      <% end %>
+      <p class="small text-secondary mt-4 mb-0">Already have an account? <%= link_to "Sign in", login_path, data: { turbo: false } %></p>
+    </div>
+  </div>
+</div>

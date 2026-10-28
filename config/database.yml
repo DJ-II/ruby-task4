@@ -1,0 +1,22 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+
+development:
+  <<: *default
+  database: ruby_task4_development
+  host: <%= ENV.fetch("PGHOST", "localhost") %>
+  username: <%= ENV["PGUSER"] %>
+  password: <%= ENV["PGPASSWORD"] %>
+
+test:
+  <<: *default
+  database: ruby_task4_test
+  host: <%= ENV.fetch("PGHOST", "localhost") %>
+  username: <%= ENV["PGUSER"] %>
+  password: <%= ENV["PGPASSWORD"] %>
+
+production:
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
