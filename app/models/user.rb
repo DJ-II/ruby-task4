@@ -7,7 +7,7 @@ class User < ApplicationRecord
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: { case_sensitive: false }
   validates :password, presence: true, on: :create
 
-  scope :recent_first, -> { order(Arel.sql("last_login_at DESC NULLS LAST, id DESC")) }
+  scope :recent_first, -> { order(Arel.sql("last_activity_at DESC NULLS LAST, id DESC")) }
 
   private
 

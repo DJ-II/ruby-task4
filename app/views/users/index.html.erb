@@ -31,7 +31,7 @@
             </th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
-            <th scope="col">Last login</th>
+            <th scope="col">Last seen</th>
             <th scope="col">Status</th>
           </tr>
         </thead>
@@ -41,9 +41,14 @@
               <td class="check-column">
                 <input class="form-check-input user-checkbox" type="checkbox" name="user_ids[]" value="<%= user.id %>" aria-label="Select <%= user.name %>">
               </td>
-              <td class="fw-medium"><%= user.name %><% if user.id == current_user.id %><span class="text-secondary fw-normal small ms-2">(you)</span><% end %></td>
+              <td class="fw-medium">
+                <%= user.name %><% if user.id == current_user.id %><span class="text-secondary fw-normal small ms-2">(you)</span><% end %>
+                <% if user.job_position.present? %>
+                  <div class="text-secondary fw-normal small"><%= user.job_position %></div>
+                <% end %>
+              </td>
               <td class="text-secondary"><%= user.email %></td>
-              <td class="text-secondary text-nowrap"><%= user.last_login_at ? user.last_login_at.utc.strftime("%Y-%m-%d %H:%M UTC") : "Never" %></td>
+              <td class="text-secondary text-nowrap"><%= user.last_activity_at ? user.last_activity_at.utc.strftime("%Y-%m-%d %H:%M UTC") : "Never" %></td>
               <td>
                 <% if user.blocked? %>
                   <span class="badge status-blocked"><span class="status-dot"></span>Blocked</span>
